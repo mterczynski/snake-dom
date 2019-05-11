@@ -1,6 +1,6 @@
 # Snake 
 
-Snake game written with vanilla JS (with DOM used for rendering).
+Snake game written in vanilla JS (with DOM used for rendering).
 
 ## Controls
 
