@@ -16,8 +16,7 @@
             transform: translate(-50%, -50%);
             left: 50%;
             top: 50%;
-            border-bottom: 1px solid black;
-            border-right:  1px solid black;
+            border: 1px solid rgb(0,0,0);
         }
 
         .row {
@@ -26,10 +25,18 @@
 
         .tile {
             display: inline-block;
-            border-left: 1px solid black;
-            border-top: 1px solid black;
+            border-left: 1px solid rgba(0,0,0,0.17);
+            border-top: 1px solid rgba(0,0,0,0.17);
             width: 40px;
             height: 40px;
+        }
+
+        .row :first-child {
+            border-left: none;
+        }
+
+        #board :first-child .tile {
+            border-top: none;
         }
 
         .apple {
