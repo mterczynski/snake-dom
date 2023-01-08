@@ -1,55 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Snake - DOM</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: Calibri, "Trebuchet MS", sans-serif;
+      }
 
-        #board {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            left: 50%;
-            top: 50%;
-            border: 1px solid rgb(0,0,0);
-        }
+      ul {
+        list-style: none;
+      }
 
-        .row {
-            display: flex;
-        }
+      .main-container {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+      }
 
-        .tile {
-            display: inline-block;
-            border-left: 1px solid rgba(0,0,0,0.17);
-            border-top: 1px solid rgba(0,0,0,0.17);
-            width: 40px;
-            height: 40px;
-        }
+      .row {
+        display: flex;
+      }
 
-        .row :first-child {
-            border-left: none;
-        }
+      .tile {
+        display: inline-block;
+        border-left: 1px solid rgba(0, 0, 0, 0.17);
+        border-top: 1px solid rgba(0, 0, 0, 0.17);
+        width: 40px;
+        height: 40px;
+      }
 
-        #board :first-child .tile {
-            border-top: none;
-        }
+      .row :first-child {
+        border-left: none;
+      }
 
-        .apple {
-            background: red;
-        }
+      #board {
+        border: 1px solid rgb(0, 0, 0);
+      }
 
-        .snake {
-            background: green;
-        }
+      #board :first-child .tile {
+        border-top: none;
+      }
+
+      .apple {
+        background: red;
+      }
+
+      .snake {
+        background: green;
+      }
+
+      .controls {
+        margin-top: 20px;
+        font-size: 1em;
+      }
     </style>
-</head>
-<body>
-    <div id="board"></div>
+  </head>
+  <body>
+    <main class="main-container">
+      <div id="board"></div>
+
+      <div class="controls">
+        <h3>Controls:</h3>
+        <ul>
+          <li>W - move up</li>
+          <li>A - move left</li>
+          <li>S - move down</li>
+          <li>D - move right</li>
+        </ul>
+      </div>
+    </main>
+
     <script src="main.js"></script>
-</body>
+  </body>
 </html>
