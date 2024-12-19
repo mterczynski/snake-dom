@@ -66,12 +66,11 @@
       }
       .icon_move {
         top: 1rem;
-
+        display: none;
         position: relative;
       }
       .main {
         display: flex;
-
         justify-content: space-between;
       }
 
@@ -100,6 +99,9 @@
 
           position: relative;
         }
+        .icon_move {
+          display: block;
+        }
         #board {
           width: 80%;
         }
@@ -117,6 +119,11 @@
         }
         .main {
           margin-top: 1rem;
+        }
+      }
+      @media screen and (max-width: 850px) {
+        .icon_move {
+          display: block;
         }
       }
     </style>

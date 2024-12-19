@@ -69,22 +69,22 @@ function addKeyHandlers() {
     const upperCaseKey = key.toUpperCase();
 
     if (
-      upperCaseKey === "A" &&
+      (upperCaseKey === "A" || key === "ArrowLeft") &&
       previousSnakeDirection !== SNAKE_DIRECTIONS.RIGHT
     ) {
       nextSnakeDirection = SNAKE_DIRECTIONS.LEFT;
     } else if (
-      upperCaseKey === "W" &&
+      (upperCaseKey === "W" || key === "ArrowUp") &&
       previousSnakeDirection !== SNAKE_DIRECTIONS.DOWN
     ) {
       nextSnakeDirection = SNAKE_DIRECTIONS.UP;
     } else if (
-      upperCaseKey === "S" &&
+      (upperCaseKey === "S" || key === "ArrowDown") &&
       previousSnakeDirection !== SNAKE_DIRECTIONS.UP
     ) {
       nextSnakeDirection = SNAKE_DIRECTIONS.DOWN;
     } else if (
-      upperCaseKey === "D" &&
+      (upperCaseKey === "D" || key === "ArrowRight") &&
       previousSnakeDirection !== SNAKE_DIRECTIONS.LEFT
     ) {
       nextSnakeDirection = SNAKE_DIRECTIONS.RIGHT;
