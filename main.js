@@ -16,6 +16,7 @@ let apple = getNewApple(snake);
 let nextSnakeDirection = SNAKE_DIRECTIONS.DOWN;
 let previousSnakeDirection = SNAKE_DIRECTIONS.DOWN;
 let wasAppleEatenThisTurn = false;
+let score = 0;
 
 function restartBoard() {
   board.innerHTML = "";
@@ -58,6 +59,8 @@ function getNewSnake() {
 
 function restartGame() {
   restartBoard();
+  score = 0;
+  document.getElementById("score").innerHTML = score;
   snake = getNewSnake();
   nextSnakeDirection = SNAKE_DIRECTIONS.DOWN;
   previousSnakeDirection = SNAKE_DIRECTIONS.DOWN;
@@ -151,6 +154,8 @@ function moveSnake() {
 function checkSnakeHeadToAppleCollision() {
   if (snake[0].x === apple.x && snake[0].y === apple.y) {
     wasAppleEatenThisTurn = true;
+    score++;
+    document.getElementById("score").innerHTML = score;
     apple = getNewApple(snake);
   }
 }

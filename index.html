@@ -92,6 +92,10 @@
         cursor: pointer;
       }
 
+      .score-header {
+        display: inline;
+      }
+
       @media screen and (max-width: 620px) {
         .main {
           flex-direction: column-reverse;
@@ -144,6 +148,11 @@
               <li>D, &rarr; - move right</li>
             </ul>
           </div>
+          <div class="score-section">
+            <h3 class="score-header">Score:</h3>
+            <span id="score">0</span>
+          </div>
+
           <div class="icon_move">
             <div class="arrow_up">
               <img
