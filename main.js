@@ -216,6 +216,27 @@ function renderApple() {
   appleTile.classList.add("apple");
 }
 
+function addGamePadControls() {
+  window.addEventListener("gamepadconnected", (e) => {
+    const index = e.gamepad.index;
+
+    function loop() {
+      const gp = navigator.getGamepads()[index];
+      if (!gp) return requestAnimationFrame(loop);
+
+      // Standard mapping for Xbox 360
+      if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
+      if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
+      if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
+      if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
+
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  });
+}
+
 function render() {
   clearBoard();
   renderApple();
@@ -233,24 +254,4 @@ restartGame();
 setInterval(gameLoop, 1000 / 10);
 addKeyHandlers();
 addArrowClickHandlers();
-
-
-window.addEventListener("gamepadconnected", (e) => {
-  // console.log("Gamepad connected:", e.gamepad.id);
-  const index = e.gamepad.index;
-
-  function loop() {
-    const gp = navigator.getGamepads()[index];
-    if (!gp) return requestAnimationFrame(loop);
-
-    // Standard mapping for Xbox 360
-    if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
-    if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
-    if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
-    if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
-
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-});
+addGamePadControls();
