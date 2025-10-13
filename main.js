@@ -226,9 +226,6 @@ function addGamePadControls() {
       const gp = navigator.getGamepads()[index];
       if (!gp) return requestAnimationFrame(loop);
 
-      console.log(gp.buttons.filter(b => b.pressed).map(b => gp.buttons.indexOf(b)));
-
-
       // XYBA buttons
       if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
       if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
