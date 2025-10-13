@@ -235,30 +235,28 @@ function addGamePadControls() {
       if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
       if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
 
-      // Left thumbstick (axes[0] = x, axes[1] = y)
-      if (typeof gp.axes[0] === 'number' && typeof gp.axes[1] === 'number') {
-        const lx = gp.axes[0];
-        const ly = gp.axes[1];
-        const magnitude = Math.sqrt(lx * lx + ly * ly);
-        if (magnitude > STICK_DEADZONE) {
-          // angle in radians, with +x to the right and +y down (gamepad y is usually -1 up)
-          const angle = Math.atan2(ly, lx);
-          // Map angle to 4 directions (Right: -45..45, Down: 45..135, Left: 135..-135, Up: -135..-45)
-          if (angle >= -Math.PI / 4 && angle <= Math.PI / 4) {
-            // Right
-            this.onRightKeyPressed();
-          } else if (angle > Math.PI / 4 && angle < (3 * Math.PI) / 4) {
-            // Down
-            this.onDownKeyPressed();
-          } else if (angle >= (3 * Math.PI) / 4 || angle <= -(3 * Math.PI) / 4) {
-            // Left
-            this.onLeftKeyPressed();
-          } else {
-            // Up
-            this.onUpKeyPressed();
+      // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
+      [[0, 1], [2, 3]].forEach(([ax, ay]) => {
+        if (typeof gp.axes[ax] === 'number' && typeof gp.axes[ay] === 'number') {
+          const sx = gp.axes[ax];
+          const sy = gp.axes[ay];
+          const mag = Math.sqrt(sx * sx + sy * sy);
+          if (mag > STICK_DEADZONE) {
+            // angle in radians (y typically -1 up on gamepads)
+            const ang = Math.atan2(sy, sx);
+            // Map angle to 4 directions
+            if (ang >= -Math.PI / 4 && ang <= Math.PI / 4) {
+              onRightKeyPressed();
+            } else if (ang > Math.PI / 4 && ang < (3 * Math.PI) / 4) {
+              onDownKeyPressed();
+            } else if (ang >= (3 * Math.PI) / 4 || ang <= -(3 * Math.PI) / 4) {
+              onLeftKeyPressed();
+            } else {
+              onUpKeyPressed();
+            }
           }
         }
-      }
+      });
 
       // Directional Pad (D-Pad)
       if (gp.buttons[13].pressed) this.onDownKeyPressed();
