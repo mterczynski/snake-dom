@@ -75,30 +75,46 @@ function updateScores() {
   localStorage.setItem(localStorageScoreKey, bestScore);
 }
 
+function onLeftKeyPressed() {
+  if(previousSnakeDirection !== SNAKE_DIRECTIONS.RIGHT)
+    nextSnakeDirection = SNAKE_DIRECTIONS.LEFT;
+}
+
+function onRightKeyPressed() {
+  if(previousSnakeDirection !== SNAKE_DIRECTIONS.LEFT)
+    nextSnakeDirection = SNAKE_DIRECTIONS.RIGHT;
+}
+
+function onUpKeyPressed() {
+  if(previousSnakeDirection !== SNAKE_DIRECTIONS.DOWN)
+    nextSnakeDirection = SNAKE_DIRECTIONS.UP;
+}
+
+function onDownKeyPressed() {
+  if(previousSnakeDirection !== SNAKE_DIRECTIONS.UP)
+    nextSnakeDirection = SNAKE_DIRECTIONS.DOWN;
+}
+
 function addKeyHandlers() {
   document.addEventListener("keydown", ({ key }) => {
     const upperCaseKey = key.toUpperCase();
 
     if (
-      (upperCaseKey === "A" || key === "ArrowLeft") &&
-      previousSnakeDirection !== SNAKE_DIRECTIONS.RIGHT
+      (upperCaseKey === "A" || key === "ArrowLeft")
     ) {
-      nextSnakeDirection = SNAKE_DIRECTIONS.LEFT;
+      this.onLeftKeyPressed();
     } else if (
-      (upperCaseKey === "W" || key === "ArrowUp") &&
-      previousSnakeDirection !== SNAKE_DIRECTIONS.DOWN
+      (upperCaseKey === "W" || key === "ArrowUp")
     ) {
-      nextSnakeDirection = SNAKE_DIRECTIONS.UP;
+      this.onUpKeyPressed();
     } else if (
-      (upperCaseKey === "S" || key === "ArrowDown") &&
-      previousSnakeDirection !== SNAKE_DIRECTIONS.UP
+      (upperCaseKey === "S" || key === "ArrowDown")
     ) {
-      nextSnakeDirection = SNAKE_DIRECTIONS.DOWN;
+      this.onDownKeyPressed();
     } else if (
-      (upperCaseKey === "D" || key === "ArrowRight") &&
-      previousSnakeDirection !== SNAKE_DIRECTIONS.LEFT
+      (upperCaseKey === "D" || key === "ArrowRight")
     ) {
-      nextSnakeDirection = SNAKE_DIRECTIONS.RIGHT;
+      this.onRightKeyPressed();
     }
   });
 }
@@ -217,3 +233,24 @@ restartGame();
 setInterval(gameLoop, 1000 / 10);
 addKeyHandlers();
 addArrowClickHandlers();
+
+
+window.addEventListener("gamepadconnected", (e) => {
+  // console.log("Gamepad connected:", e.gamepad.id);
+  const index = e.gamepad.index;
+
+  function loop() {
+    const gp = navigator.getGamepads()[index];
+    if (!gp) return requestAnimationFrame(loop);
+
+    // Standard mapping for Xbox 360
+    if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
+    if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
+    if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
+    if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+});
