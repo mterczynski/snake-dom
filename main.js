@@ -224,11 +224,23 @@ function addGamePadControls() {
       const gp = navigator.getGamepads()[index];
       if (!gp) return requestAnimationFrame(loop);
 
-      // Standard mapping for Xbox 360
+      // XYBA buttons
       if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
       if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
       if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
       if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
+
+      // Directional Pad (D-Pad)
+      if (gp.buttons[13].pressed) this.onDownKeyPressed();
+      if (gp.buttons[15].pressed) this.onRightKeyPressed();
+      if (gp.buttons[14].pressed) this.onLeftKeyPressed();
+      if (gp.buttons[12].pressed) this.onUpKeyPressed();
+
+      // Bumpers and triggers
+      if (gp.buttons[5].pressed) this.onDownKeyPressed();
+      if (gp.buttons[7].pressed) this.onRightKeyPressed();
+      if (gp.buttons[6].pressed) this.onLeftKeyPressed();
+      if (gp.buttons[4].pressed) this.onUpKeyPressed();
 
       requestAnimationFrame(loop);
     }
