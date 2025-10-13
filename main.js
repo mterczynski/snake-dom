@@ -8,7 +8,6 @@ const arrow_up = document.querySelector(".arrow_up");
 const arrow_down = document.querySelector(".arrow_down");
 const arrow_side_1 = document.querySelector(".arrow-aside_1");
 const arrow_side_2 = document.querySelector(".arrow-aside_2");
-console.log(arrow_up);
 const board = document.getElementById("board");
 const localStorageScoreKey = "snake-dom-best-score";
 
