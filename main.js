@@ -219,16 +219,46 @@ function renderApple() {
 function addGamePadControls() {
   window.addEventListener("gamepadconnected", (e) => {
     const index = e.gamepad.index;
+    // minimum magnitude (length) of thumbstick vector to consider it a deliberate input
+    const STICK_DEADZONE = 0.4;
 
     function loop() {
       const gp = navigator.getGamepads()[index];
       if (!gp) return requestAnimationFrame(loop);
+
+      console.log(gp.buttons.filter(b => b.pressed).map(b => gp.buttons.indexOf(b)));
+
 
       // XYBA buttons
       if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
       if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
       if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
       if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
+
+      // Left thumbstick (axes[0] = x, axes[1] = y)
+      if (typeof gp.axes[0] === 'number' && typeof gp.axes[1] === 'number') {
+        const lx = gp.axes[0];
+        const ly = gp.axes[1];
+        const magnitude = Math.sqrt(lx * lx + ly * ly);
+        if (magnitude > STICK_DEADZONE) {
+          // angle in radians, with +x to the right and +y down (gamepad y is usually -1 up)
+          const angle = Math.atan2(ly, lx);
+          // Map angle to 4 directions (Right: -45..45, Down: 45..135, Left: 135..-135, Up: -135..-45)
+          if (angle >= -Math.PI / 4 && angle <= Math.PI / 4) {
+            // Right
+            this.onRightKeyPressed();
+          } else if (angle > Math.PI / 4 && angle < (3 * Math.PI) / 4) {
+            // Down
+            this.onDownKeyPressed();
+          } else if (angle >= (3 * Math.PI) / 4 || angle <= -(3 * Math.PI) / 4) {
+            // Left
+            this.onLeftKeyPressed();
+          } else {
+            // Up
+            this.onUpKeyPressed();
+          }
+        }
+      }
 
       // Directional Pad (D-Pad)
       if (gp.buttons[13].pressed) this.onDownKeyPressed();
