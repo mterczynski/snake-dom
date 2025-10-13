@@ -232,7 +232,19 @@ function addGamePadControls() {
       if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
       if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
 
-      // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
+      // Directional Pad (D-Pad)
+      if (gp.buttons[13].pressed) this.onDownKeyPressed();
+      if (gp.buttons[15].pressed) this.onRightKeyPressed();
+      if (gp.buttons[14].pressed) this.onLeftKeyPressed();
+      if (gp.buttons[12].pressed) this.onUpKeyPressed();
+
+      // Bumpers and triggers
+      if (gp.buttons[5].pressed) this.onDownKeyPressed();
+      if (gp.buttons[7].pressed) this.onRightKeyPressed();
+      if (gp.buttons[6].pressed) this.onLeftKeyPressed();
+      if (gp.buttons[4].pressed) this.onUpKeyPressed();
+
+       // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
       [[0, 1], [2, 3]].forEach(([ax, ay]) => {
         if (typeof gp.axes[ax] === 'number' && typeof gp.axes[ay] === 'number') {
           const sx = gp.axes[ax];
@@ -254,18 +266,6 @@ function addGamePadControls() {
           }
         }
       });
-
-      // Directional Pad (D-Pad)
-      if (gp.buttons[13].pressed) this.onDownKeyPressed();
-      if (gp.buttons[15].pressed) this.onRightKeyPressed();
-      if (gp.buttons[14].pressed) this.onLeftKeyPressed();
-      if (gp.buttons[12].pressed) this.onUpKeyPressed();
-
-      // Bumpers and triggers
-      if (gp.buttons[5].pressed) this.onDownKeyPressed();
-      if (gp.buttons[7].pressed) this.onRightKeyPressed();
-      if (gp.buttons[6].pressed) this.onLeftKeyPressed();
-      if (gp.buttons[4].pressed) this.onUpKeyPressed();
 
       requestAnimationFrame(loop);
     }
