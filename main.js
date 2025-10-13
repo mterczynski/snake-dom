@@ -219,9 +219,7 @@ function renderApple() {
 function addGamePadControls() {
   window.addEventListener("gamepadconnected", (e) => {
     const index = e.gamepad.index;
-    // minimum magnitude (length) of thumbstick vector to consider it a deliberate input
-    const STICK_DEADZONE = 0.4;
-
+    
     function loop() {
       const gp = navigator.getGamepads()[index];
       if (!gp) return requestAnimationFrame(loop);
@@ -244,7 +242,9 @@ function addGamePadControls() {
       if (gp.buttons[6].pressed) this.onLeftKeyPressed();
       if (gp.buttons[4].pressed) this.onUpKeyPressed();
 
-       // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
+      // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
+      // minimum magnitude (length) of thumbstick vector to consider it a deliberate input
+      const STICK_DEADZONE = 0.4;
       [[0, 1], [2, 3]].forEach(([ax, ay]) => {
         if (typeof gp.axes[ax] === 'number' && typeof gp.axes[ay] === 'number') {
           const sx = gp.axes[ax];
