@@ -101,19 +101,19 @@ function addKeyHandlers() {
     if (
       (upperCaseKey === "A" || key === "ArrowLeft")
     ) {
-      this.onLeftKeyPressed();
+      onLeftKeyPressed();
     } else if (
       (upperCaseKey === "W" || key === "ArrowUp")
     ) {
-      this.onUpKeyPressed();
+      onUpKeyPressed();
     } else if (
       (upperCaseKey === "S" || key === "ArrowDown")
     ) {
-      this.onDownKeyPressed();
+      onDownKeyPressed();
     } else if (
       (upperCaseKey === "D" || key === "ArrowRight")
     ) {
-      this.onRightKeyPressed();
+      onRightKeyPressed();
     }
   });
 }
@@ -179,6 +179,8 @@ function checkSnakeHeadToAppleCollision() {
     bestScore = Math.max(bestScore, score);
     updateScores();
     apple = getNewApple(snake);
+    // vibrate controllers / device briefly to indicate eating an apple
+    vibrateGamepads(50, 0.1, 0.1);
   }
 }
 
@@ -186,6 +188,8 @@ function checkSnakeHeadToSnakeTailCollision() {
   const head = snake[0];
   const tail = snake.slice(1);
   if (tail.some((tailPart) => tailPart.x === head.x && tailPart.y === head.y)) {
+    // vibrate on game over
+    vibrateGamepads(300, 1.0, 1.0);
     restartGame();
   }
 }
@@ -213,6 +217,45 @@ function renderApple() {
   appleTile.classList.add("apple");
 }
 
+// Vibrate connected gamepads (Xbox 360 / modern controllers) if supported.
+// Uses GamepadHapticActuator.playEffect('dual-rumble', ...) when available,
+// falls back to navigator.vibrate for devices that support it.
+function vibrateGamepads(duration = 100, strong = 1.0, weak = 1.0) {
+  try {
+    if (navigator.getGamepads) {
+      const gps = navigator.getGamepads();
+      for (let i = 0; i < gps.length; i++) {
+        const gp = gps[i];
+        if (!gp) continue;
+        const actuator = gp.vibrationActuator || (gp.hapticActuators && gp.hapticActuators[0]);
+        if (actuator && typeof actuator.playEffect === 'function') {
+          // playEffect returns a promise
+          try {
+            actuator.playEffect('dual-rumble', {
+              duration: duration,
+              startDelay: 0,
+              strongMagnitude: Math.max(0, Math.min(1, strong)),
+              weakMagnitude: Math.max(0, Math.min(1, weak)),
+            }).catch(() => {});
+          } catch (e) {
+            // some implementations may throw synchronously
+          }
+        } else if (actuator && typeof actuator.pulse === 'function') {
+          // older API fallback
+          try { actuator.pulse(Math.max(0, Math.min(1, strong)), duration); } catch (e) {}
+        }
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // Mobile / other fallback
+  if (navigator.vibrate) {
+    try { navigator.vibrate(duration); } catch (e) {}
+  }
+}
+
 function addGamePadControls() {
   window.addEventListener("gamepadconnected", (e) => {
     const index = e.gamepad.index;
@@ -221,23 +264,23 @@ function addGamePadControls() {
       const gp = navigator.getGamepads()[index];
       if (!gp) return requestAnimationFrame(loop);
 
-      // XYBA buttons
-      if (gp.buttons[0].pressed) this.onDownKeyPressed(); // A
-      if (gp.buttons[1].pressed) this.onRightKeyPressed(); // B
-      if (gp.buttons[2].pressed) this.onLeftKeyPressed(); // X
-      if (gp.buttons[3].pressed) this.onUpKeyPressed(); // Y
+  // XYBA buttons
+  if (gp.buttons[0].pressed) onDownKeyPressed(); // A
+  if (gp.buttons[1].pressed) onRightKeyPressed(); // B
+  if (gp.buttons[2].pressed) onLeftKeyPressed(); // X
+  if (gp.buttons[3].pressed) onUpKeyPressed(); // Y
 
-      // Directional Pad (D-Pad)
-      if (gp.buttons[13].pressed) this.onDownKeyPressed();
-      if (gp.buttons[15].pressed) this.onRightKeyPressed();
-      if (gp.buttons[14].pressed) this.onLeftKeyPressed();
-      if (gp.buttons[12].pressed) this.onUpKeyPressed();
+  // Directional Pad (D-Pad)
+  if (gp.buttons[13].pressed) onDownKeyPressed();
+  if (gp.buttons[15].pressed) onRightKeyPressed();
+  if (gp.buttons[14].pressed) onLeftKeyPressed();
+  if (gp.buttons[12].pressed) onUpKeyPressed();
 
-      // Bumpers and triggers
-      if (gp.buttons[5].pressed) this.onDownKeyPressed();
-      if (gp.buttons[7].pressed) this.onRightKeyPressed();
-      if (gp.buttons[6].pressed) this.onLeftKeyPressed();
-      if (gp.buttons[4].pressed) this.onUpKeyPressed();
+  // Bumpers and triggers
+  if (gp.buttons[5].pressed) onDownKeyPressed();
+  if (gp.buttons[7].pressed) onRightKeyPressed();
+  if (gp.buttons[6].pressed) onLeftKeyPressed();
+  if (gp.buttons[4].pressed) onUpKeyPressed();
 
       // Thumbsticks: handle both left (axes 0,1) and right (axes 2,3) with one block
       // minimum magnitude (length) of thumbstick vector to consider it a deliberate input
