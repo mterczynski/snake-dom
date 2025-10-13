@@ -119,8 +119,6 @@ function addKeyHandlers() {
   });
 }
 
-// arrow
-
 function addArrowClickHandlers() {
   arrow_up.addEventListener("click", () => {
     if (previousSnakeDirection !== SNAKE_DIRECTIONS.DOWN) {
