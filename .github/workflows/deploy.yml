@@ -1,0 +1,52 @@
+name: Deploy Snake Game
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v4
+      
+    - name: Checkout target repository
+      uses: actions/checkout@v4
+      with:
+        repository: mterczynski/mterczynski.github.io
+        token: ${{ secrets.DEPLOY_TOKEN }}
+        path: target-repo
+        
+    - name: Clean and prepare target directory
+      run: |
+        rm -rf target-repo/snake/
+        mkdir -p target-repo/snake/
+        
+    - name: Verify source files exist
+      run: |
+        ls -la ./img ./index.html ./main.js
+        echo "All required files are present"
+        
+    - name: Copy game files to target repository
+      run: |
+        cp -r ./img target-repo/snake/
+        cp ./index.html target-repo/snake/
+        cp ./main.js target-repo/snake/
+        echo "Files copied successfully"
+        
+    - name: Commit and push changes
+      run: |
+        cd target-repo
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update snake build (SHA: ${{ github.sha }})"
+          git push
+          echo "Successfully deployed snake game"
+        fi

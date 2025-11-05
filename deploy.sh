@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# DEPRECATED: This script has been replaced by GitHub Actions workflow
+# See .github/workflows/deploy.yml and DEPLOYMENT.md for the new automated deployment
+# This file is kept for reference only
+
+# Legacy deployment script - DO NOT USE
 # 2. Copy build to ../mterczynski.github.io
 rm -rf ../mterczynski.github.io/snake/
 mkdir ../mterczynski.github.io/snake/
